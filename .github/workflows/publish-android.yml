@@ -54,3 +54,12 @@ jobs:
       with:
         created_tag: ${{ github.event.inputs.tag }}
         args: 'SampleApp-android.apk'
+    - name: Open issue on failure
+      if: failure()
+      uses: JasonEtco/create-an-issue@v2.4.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        filename: .github/action-failure-template.md
+        repository: ${{ github.repository }}
+        run_id: ${{ github.run_id }}
