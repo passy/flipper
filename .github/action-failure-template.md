@@ -1,5 +1,5 @@
 ---
-title: GitHub Actions Workflow failed: {{ tools.context.workflow }}
+title: GitHub Actions Workflow failed - {{ tools.context.workflow }}
 assignees: passy
 labels: bug
 ---
