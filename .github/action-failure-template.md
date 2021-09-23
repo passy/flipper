@@ -4,6 +4,6 @@ assignees: passy
 labels: bug
 ---
 
-The workflow {{ payload }} failed. You can see it at
+The workflow {{ tools.context }} failed. You can see it at
 
 https://github.com/{{ env.REPOSITORY }}/actions/runs/{{ env.RUN_ID }}
