@@ -1,9 +1,9 @@
 ---
-title: GitHub Actions Workflow failed - {{ name }}
+title: GitHub Actions Workflow failed - {{ action }}
 assignees: passy
 labels: bug
 ---
 
-The workflow {{ name }} failed. You can see it at
+The workflow {{ action }} failed. You can see it at
 
 https://github.com/{{ env.REPOSITORY }}/actions/runs/{{ env.RUN_ID }}
