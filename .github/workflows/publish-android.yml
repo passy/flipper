@@ -61,7 +61,7 @@ jobs:
       uses: JasonEtco/create-an-issue@v2.4.0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        REPOSITORY: ${{ github.repository }}
+        RUN_ID: ${{ github.run_id }}
       with:
         filename: .github/action-failure-template.md
-        repository: ${{ github.repository }}
-        run_id: ${{ github.run_id }}
