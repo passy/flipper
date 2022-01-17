@@ -6,9 +6,9 @@ custom_edit_url: https://www.internalfb.com/intern/diffusion/FBS/browsefile/mast
 ---
 import useBaseUrl from '@docusaurus/useBaseUrl';
 
-import InternalTroubleshooting from './fb/internal-troubleshooting.mdx';
+import InternalTroubleshooting from './fb/_internal-troubleshooting.mdx';
 
-import PortalTroubleshooting from './fb/portal-troubleshooting.mdx';
+import PortalTroubleshooting from './fb/_portal-troubleshooting.mdx';
 
 We hope that Flipper works well out of the box, but the software is a work in progress and problems will occur. Below are some known issues and steps you can take to try to resolve them.
 
@@ -162,9 +162,13 @@ When using Flipper with React Native, two devices should show up:
 
 1. Make sure you are running a debug build. Flipper _only_ supports debug builds.
 1. If you are upgraded from RN < 0.62.2, make sure you've updated all the dependencies and build related files according to the upgrade helper. For example: https://react-native-community.github.io/upgrade-helper/?from=0.61.4&to=0.62.2
-1. If you upgraded, make sure you made a clean build: `cd android && ./gradlew clean`, `cd iOS && pod install --repo-update`
-1. For iOS, make sure it works on a simulator first
+1. If you upgraded, make sure you made a clean build: `cd android && ./gradlew clean`, `cd iOS && pod install --repo-update`.
+1. For iOS, make sure it works on a simulator first.
 1. (Unconfirmed) check the deployment info target in the XCode project settings. Target should be `iOS 9.0`.
+
+#### Q: I'm seeing "certificate verify failed, type = SSL error" in the logs
+
+Ensure that your device is set to the correct time and timezone for TLS verification to work.
 
 #### Q: I see my app, but I don't see the external plugins I've installed
 
@@ -212,7 +216,7 @@ Another way to fix this is to set the `resolutions` field in the `package.json` 
 
 #### iOS Build errors in React Native
 
-First, make sure your cocoapods is up to date (`sudo gem install cocoapods`), and that you are using the [latest FlipperKit](getting-started/react-native#using-the-latest-flipper-sdk).
+First, make sure your cocoapods is up to date (`sudo gem install cocoapods`), and that you are using the [latest FlipperKit](getting-started/react-native.mdx#using-the-latest-flipper-sdk).
 
 For inexplainable build errors, clone and verify if our [reference project](https://github.com/facebook/flipper/tree/main/react-native/ReactNativeFlipperExample) builds and runs locally. If it does, we recommend to compare the `package.json` and `ios/Podfile` files with yours. If that doesn't yield anything, compare the `ios/Podfile.lock` as well to verify any transitive pod dependencies need updating.
 
@@ -228,7 +232,7 @@ For inexplainable build errors, clone and verify if our [reference project](http
 
 ####  Swift errors
 
-If you experience errors such as `Undefined symbol: associated type descriptor for FloatLiteralType` or `Undefined symbol: __swift_FORCE_LOAD_$_swiftCompatibility50` after going through the [Getting Started](getting-started/index) tutorial you must do as follows:
+If you experience errors such as `Undefined symbol: associated type descriptor for FloatLiteralType` or `Undefined symbol: __swift_FORCE_LOAD_$_swiftCompatibility50` after going through the [Getting Started](getting-started/index.mdx) tutorial you must do as follows:
 
 1. Open your project in Xcode;
 1. Click in your project's name on the left side;

@@ -3,8 +3,8 @@ id: desktop-plugin-structure
 title: Plugin structure
 ---
 
-import FbNpmDeps from '../fb/adding-npm-dependencies-0.mdx'
-import FbOnlyParts from '../fb/fb-only-parts-in-os-plugins.mdx'
+import FbNpmDeps from '../fb/_adding-npm-dependencies-0.mdx'
+import FbOnlyParts from '../fb/_fb-only-parts-in-os-plugins.mdx'
 
 Flipper Desktop plugins have a rigid structure. We recommend to scaffold any new plugin using our scaffolding tooling.
 
@@ -269,6 +269,15 @@ If you need any dependencies in your plugin, you can install them using `yarn ad
 <FbNpmDeps />
 
 <OssOnly>
+
+<div class="warning">
+
+Flipper plugins should be designed to work inside browsers as well, as Flipper isn't guaranteed to be always running on top of Electron. 
+For that reason it should be avoided to use Node.js APIs directly (e.g. modules like `fs`, `child_process`, `path`), 
+or packages that depend on those. 
+For alternative APIs, see [using Node.js APIs](./node-apis.mdx) in Flipper plugins.
+
+</div>
 
 ## Migration to new Plugin Specification
 

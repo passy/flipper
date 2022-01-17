@@ -71,7 +71,7 @@ In contrast, `isConnected` returns a boolean that merely captures the current st
 
 Usage: `client.onMessage(event: string, callback: (params) => void)`
 
-This subscribes the plugin to a specific event that is fired from the client plugin (using [`connection.send`](../extending/create-plugin#push-data-to-the-desktop)).
+This subscribes the plugin to a specific event that is fired from the client plugin (using [`connection.send`](../extending/create-plugin.mdx#push-data-to-the-desktop)).
 Typically used to update some of the [state](#createstate).
 For background plugins that are currently not active in the UI, messages won't arrive immediately, but are queued until the user opens the plugin.
 
@@ -99,7 +99,7 @@ export function plugin(client: PluginClient<Events, {}>) {
 }
 ```
 
-The Flipper Sample application contains a plugin that demonstrates these API, see [bi-directional-communication-demo](create-plugin#bi-directional-communication-demo).
+The Flipper Sample application contains a plugin that demonstrates these API, see [bi-directional-communication-demo](create-plugin.mdx#bi-directional-communication-demo).
 
 #### `onUnhandledMessage`
 
@@ -128,7 +128,7 @@ Usage: `client.onConnect(callback: () => void)`
 
 Triggered once the connection with the plugin on the client is established, and for example [`send`](#send) can be called safely.
 Typically, this happens when the plugin is activated (opened) in the Flipper Desktop.
-However, for [background plugins](create-plugin#background-plugins), this happens immediately after the plugin has been instantiated.
+However, for [background plugins](create-plugin.mdx#background-plugins), this happens immediately after the plugin has been instantiated.
 For archived / imported devices, this lifecycle is never triggered.
 
 #### `onDisconnect`
@@ -137,7 +137,7 @@ Usage: `client.onDisconnect(callback: () => void)`
 
 Triggered once the connection with the plugin on the client has been lost.
 Typically, this happens when the user leaves the plugin in the Flipper Desktop, when the plugin is disabled, or when the app or device has disconnected.
-However, for [background plugins](create-plugin#background-plugins), this event won't fire when the user merely navigates somewhere else.
+However, for [background plugins](create-plugin.mdx#background-plugins), this event won't fire when the user merely navigates somewhere else.
 In that case, [`onDeactivate`](#ondeactivate) can be used instead.
 
 #### `onDestroy`
@@ -207,7 +207,7 @@ If a plugin has complex initialization logic it is recommended to put it in the 
 
 Usage: `client.send(method: string, params: object): Promise<object>`
 
-If the plugin is connected, `send` can be used to invoke a [method](create-plugin#[background-plugins#using-flipperconnection) on the client implementation of the plugin.
+If the plugin is connected, `send` can be used to invoke a [method](create-plugin.mdx#[background-plugins#using-flipperconnection) on the client implementation of the plugin.
 
 Note that if `client.isConnected` returns `false`, calling `client.send` will throw an exception. This is the case if for example the connection with the device or application was lost.
 Generally one should guard `client.send` calls with a check to `client.isConnected`.
@@ -237,7 +237,7 @@ export function plugin(client: PluginClient<{}, Methods>) {
 }
 ```
 
-The Flipper Sample application contains a plugin that demonstrates these API, see [bi-directional-communication-demo](create-plugin#bi-directional-communication-demo).
+The Flipper Sample application contains a plugin that demonstrates these API, see [bi-directional-communication-demo](create-plugin.mdx#bi-directional-communication-demo).
 
 #### `addMenuEntry`
 
@@ -250,7 +250,6 @@ Example:
 ```typescript
 client.addMenuEntry({
     label: 'Reset Selection',
-    topLevelMenu: 'Edit',
     accelerator: 'CmdOrCtrl+R'
     handler: () => {
       // Event handling
@@ -258,9 +257,9 @@ client.addMenuEntry({
 }
 ```
 
-The `accelerator` argument is optional, but describes the keyboard shortcut. See the [Electron docs](https://www.electronjs.org/docs/api/accelerator) for their format. The `topLevelMenu` must be one of `"Edit"`, `"View"`, `"Window"` or `"Help"`.
+The `accelerator` argument is optional, but describes the keyboard shortcut. See the [Electron docs](https://www.electronjs.org/docs/api/accelerator) for their format.
 
-It is possible to leave out the `label`, `topLevelMenu` and `accelerator` fields if a pre-defined `action` is set, which configures all three of them.
+It is possible to leave out the `label`, and `accelerator` fields if a pre-defined `action` is set, which configures all three of them.
 The currently pre-defined actions are `"Clear"`, `"Go To Bottom"` and `"Create Paste"`.
 Example of using a pre-defined action:
 
@@ -415,7 +414,7 @@ See the similarly named method under [`PluginClient`](#pluginclient).
 ## Device
 
 `Device` captures the metadata of the device the plugin is currently connected to.
-Device objects are passed into the [`supportsDevice` method](../tutorial/js-custom#creating-a-device-plugin) of a device plugin, and available as `device` field on a [`DevicePluginClient`](#devicepluginclient).
+Device objects are passed into the [`supportsDevice` method](../tutorial/js-custom.mdx#creating-a-device-plugin) of a device plugin, and available as `device` field on a [`DevicePluginClient`](#devicepluginclient).
 
 ### Properties
 
@@ -738,14 +737,14 @@ Usage: `const instance = usePlugin(plugin)`
 Can be used by any component in the plugin, and gives the current `instance` that corresponds with the currently loaded plugin.
 The `plugin` parameter isn't actually used, but used to verify that a component is used correctly inside a mounted component, and helps with type inference.
 The returned `instance` method corresponds to the object that is returned from the `plugin` / `devicePlugin` definition.
-See the [tutorial](../tutorial/js-custom#building-an-user-interface-for-the-plugin) for how this hook is used in practice.
+See the [tutorial](../tutorial/js-custom.mdx#building-an-user-interface-for-the-plugin) for how this hook is used in practice.
 
 ### useValue
 
 Usage: `const currentValue = useValue(stateAtom)`
 
 Returns the current value of a state atom, and also subscribes the current component to future changes of the atom (in contrast to using `stateAtom.get()` directly).
-See the [tutorial](../tutorial/js-custom#building-an-user-interface-for-the-plugin) for how this hook is used in practice.
+See the [tutorial](../tutorial/js-custom.mdx#building-an-user-interface-for-the-plugin) for how this hook is used in practice.
 
 ### useLogger
 
@@ -936,6 +935,21 @@ Shows a loading spinner. Accept an optional `size` to make the spinner larger / 
 An element that can be used to provide a New User eXperience: Hints that give a one time introduction to new features to the current user.
 See `View > Flipper Style Guide` inside the Flipper application for more details.
 
+### FileSelector
+
+Enables file uploading. Shows an input with an upload button. User can select and upload files by clicking on the button, on the input, by pressing enter when the input is focued, and by dropping a file on the input. The input's value is a path to a file or its name if path is not available (in browsers).
+
+Exports `FileSelector` components with the following props:
+
+1. `label` -  placeholder text displayed in the input when it is empty
+1. `onChange` - callback called when new files are selected or when the exisitng selection is reset
+1. `multi` - *optional* allows selecting multiple files at once
+1. `extensions` - *optional* list of allowed file extentions
+1. `required` - *optional* boolean to mark the file selection input as required
+1. `encoding` - *optional* imported file encoding. Default: UTF-8.
+1. `className` - *optional* class name string
+1. `style` - *optional* CSS styles object
+
 ### DetailSidebar
 
 An element that can be passed children which will be shown in the right sidebar of Flipper.
@@ -976,7 +990,9 @@ See `View > Flipper Style Guide` inside the Flipper application for more details
 A set of globally available utilities like opening links, interacting with the clipboard, etc.
 Example: `getFlipperLib().writeTextToClipboard("hello from Flipper");
 
-The full set of utilities can be found [here](https://github.com/facebook/flipper/blob/main/desktop/flipper-plugin/src/plugin/FlipperLib.tsx#L20)
+The full set of utilities can be found [here](https://github.com/facebook/flipper/blob/main/desktop/flipper-plugin/src/plugin/FlipperLib.tsx#L94).
+
+Since Node.js system API's cannot be used directly by Flipper plugins (when running in a browser), the utilties exposed on `getFlipperLib().remoteServerContext` should be used instead, as detailed in [Using Node.js APIs](./node-apis.mdx).
 
 ### createTablePlugin
 
@@ -1038,29 +1054,131 @@ renderReactRoot((unmount) => (
 ));
 ```
 
-## sleep
+### sleep
 
 Usage: `await sleep(1000)`
 
 Creates a promise that automatically resolves after the specified amount of milliseconds.
 
-## timeout
+### timeout
 
 Usage `await timeout(1000, promise, message?)`
 
-## styled
+### styled
 
 A convenience re-export of `styled` from [emotion](https://emotion.sh/docs/styled).
 
-## textContent
+### textContent
 
 Given a string or React element, returns a text representation of that element, that is suitable as plain text.
+
+### path
+
+A set of utilizities to handle file paths. A subset of Node.js' [path](https://nodejs.org/api/path.html). 
+
+<!-- Docs copied from https://github.com/nodejs/node/blob/master/doc/api/path.md -->
+#### `path.basename(path[, ext])`
+
+* `path` {string}
+* `ext` {string} An optional file extension
+* Returns: {string}
+
+The `path.basename()` method returns the last portion of a `path`, similar to
+the Unix `basename` command. Trailing directory separators are ignored.
+
+```js
+path.basename('/foo/bar/baz/asdf/quux.html');
+// Returns: 'quux.html'
+
+path.basename('/foo/bar/baz/asdf/quux.html', '.html');
+// Returns: 'quux'
+```
+
+#### `path.extname(path)`
+
+* `path` {string}
+* Returns: {string}
+
+The `path.extname()` method returns the extension of the `path`, from the last
+occurrence of the `.` (period) character to end of string in the last portion of
+the `path`. If there is no `.` in the last portion of the `path`, or if
+there are no `.` characters other than the first character of
+the basename of `path` (see `path.basename()`) , an empty string is returned.
+
+```js
+path.extname('index.html');
+// Returns: '.html'
+
+path.extname('index.coffee.md');
+// Returns: '.md'
+
+path.extname('index.');
+// Returns: '.'
+
+path.extname('index');
+// Returns: ''
+
+path.extname('.index');
+// Returns: ''
+
+path.extname('.index.md');
+// Returns: '.md'
+```
+
+#### `path.join([...paths])`
+
+* `...paths` {string} A sequence of path segments
+* Returns: {string}
+
+The `path.join()` method joins all given `path` segments together using the
+platform-specific separator as a delimiter, then normalizes the resulting path.
+
+Zero-length `path` segments are ignored. If the joined path string is a
+zero-length string then `'.'` will be returned, representing the current
+working directory.
+
+```js
+path.join('/foo', 'bar', 'baz/asdf', 'quux', '..');
+// Returns: '/foo/bar/baz/asdf'
+```
+
+#### `path.normalize(path)`
+
+* `path` {string}
+* Returns: {string}
+
+The `path.normalize()` method normalizes the given `path`, resolving `'..'` and
+`'.'` segments.
+
+When multiple, sequential path segment separation characters are found (e.g.
+`/`), they are replaced by a single
+instance of `/`. Trailing separators are preserved.
+
+If the `path` is a zero-length string, `'.'` is returned, representing the
+current working directory.
+
+```js
+path.normalize('/foo/bar//baz/asdf/quux/..');
+// Returns: '/foo/bar/baz/asdf'
+```
+
+### uuid
+
+Usage: `uuid()`
+
+Returns UUID V4.
+
+### safeStringify
+
+Usage: `safeStringify(dataStructure)`
+
+Serialises the given data structure using `JSON.stringify`, but doesn't throw if the processes failed, but rather returns a `<unserializable ...>` string.
 
 ## TestUtils
 
 The object `TestUtils` as exposed from `flipper-plugin` exposes utilities to write unit tests for Sandy plugins.
 Different utilities are exposed depending on whether you want to test a client or device plugin, and whether or not the component should be rendered or only the logic itself is going to be tested.
-It is recommended to follow the [tutorial](../tutorial/js-custom) first, as it explains how unit tests should be setup.
+It is recommended to follow the [tutorial](../tutorial/js-custom.mdx) first, as it explains how unit tests should be setup.
 
 ### Starting a plugin
 

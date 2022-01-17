@@ -23,11 +23,10 @@ When developing Flipper plugins we recommend the following IDEs:
 
 ### TypeScript
 
-Flipper Desktop is written in TypeScript. 
+Flipper Desktop is written in TypeScript.
 Using our internal "VSCode @ FB" as IDE is strongly recommended (`code-fb`).
 
-Make sure to install the `[FB-Internal]` "ESLint" and "Pretter" extensions are enabled.
-
+Make sure to install and enable extensions `[FB-Internal] ESLint Diagnostics` and `[FB-Internal] Prettier`.
 If for some reason it is not working, the builtin TypeScript extension might be disabled. To enable it, to go to extensions, search for “@builtin typescript” and enable it.
 
 ### Android (Java)
@@ -49,8 +48,8 @@ When developing Flipper plugins we strongly recommend to run from Flipper itself
 - Automatic transpilation and bundling of loaded plugins: ES6, TypeScript, JSX.
 - Automatic refresh after code changes.
 - React and Redux Dev Tools.
-- [Debugging](debugging) using Chrome Dev Tools or Visual Studio Code.
-- Additional debug information like React warnings and performance metrics. 
+- [Debugging](debugging.mdx) using Chrome Dev Tools or Visual Studio Code.
+- Additional debug information like React warnings and performance metrics.
 
 Prerequisites for Flipper development build:
 - node ≥ 14
@@ -75,11 +74,23 @@ Tip: start with `yarn start --fast-refresh` for experimental fast refresh.
 
 <FbInternalOnly>
 
-```
-fbclone fbsource
+Note: All these steps must be run on a local machine (e.g. laptop) and development cannot be done on a Dev Server or OnDemand as Flipper is a desktop application.
+
+```bash
+fbclone fbsource --sparse tools/scm/sparse/xplat/flipper-js
 cd ~/fbsource/xplat/sonar/desktop
 yarn
 yarn start
+```
+
+A note on sparse profiles: We have a minimal profile for working with the Flipper JavaScript
+files in `fbsource` for plugin developers. This will drastically reduce the size of your checkout, but
+won't include the files necessary to, for instance, build and work on mobile apps.
+
+If you have an existing sparse checkout, you can add the Flipper profile with
+
+```bash
+hg sparse enable tools/scm/sparse/xplat/flipper-js
 ```
 
 Tip: start with `yarn start --fast-refresh` for experimental fast refresh.
@@ -87,7 +98,7 @@ Tip: start with `yarn start --fast-refresh` for experimental fast refresh.
 Tip: start wih `yarn start --public-build` to preview changes for public builds.
 
 Use VSCode to hack on Flipper.
-To make sure ESLint and Prettier are applied correctly, make sure to open either `sonar` or `sonar/desktop` as workspace folder in VSCode: `code-fb ~/fbsource/xplat/sonar`. 
+To make sure ESLint and Prettier are applied correctly, make sure to open either `sonar` or `sonar/desktop` as workspace folder in VSCode: `code-fb ~/fbsource/xplat/sonar`.
 
 </FbInternalOnly>
 
@@ -121,9 +132,9 @@ Options:
                         which means that all plugins loaded.             [array]
   --open-dev-tools      Open Dev Tools window on startup. The flag is disabled
                         by default. Env var FLIPPER_OPEN_DEV_TOOLS is equivalent
-                        to the command-line option "--open-dev-tools". If 
-                        "FLIPPER_UPDATE_DEV_TOOLS=true" is set additionally, 
-                        Flipper will try to update the dev tools from the play 
+                        to the command-line option "--open-dev-tools". If
+                        "FLIPPER_UPDATE_DEV_TOOLS=true" is set additionally,
+                        Flipper will try to update the dev tools from the play
                         store.                                         [boolean]
   --dev-server-port     Dev server port. 3000 by default. Env var "PORT=3001" is
                         equivalent to the command-line option "--dev-server-port
@@ -155,8 +166,8 @@ To start Flipper against a specific OnDemand instance, set FB_ONDEMAND flag, e.g
 
 ## Submitting a diff / PR
 
-Make sure your new functionality is covered with tests, and run `yarn test` or `yarn test --watch` in the `desktop/` directory to verify that they pass. 
+Make sure your new functionality is covered with tests, and run `yarn test` or `yarn test --watch` in the `desktop/` directory to verify that they pass.
 
-See the [testing](testing) page for more details on writing and running test.
+See the [testing](testing.mdx) page for more details on writing and running test.
 
 To make sure you don't get any lint/formatting errors, run `yarn lint` before submitting your diff. Some errors (especially formatting errors can be auto-fixed by running `yarn fix`
