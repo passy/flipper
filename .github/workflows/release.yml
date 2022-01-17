@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - 'desktop/package.json'
+      - "desktop/package.json"
 
 jobs:
   release:
@@ -27,7 +27,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ steps.extract-version-commit.outputs.commit }}
-          version_tag_prefix: 'v'
+          version_tag_prefix: "v"
           version_assertion_command: 'grep -q "\"version\": \"$version\"" desktop/package.json'
       - name: Create release
         if: ${{ steps.tag-version-commit.outputs.tag != '' }}
@@ -51,29 +51,29 @@ jobs:
       desktop-directory: ./desktop
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        ref: ${{ needs.release.outputs.tag }}
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '14.x'
-    - name: Install
-      uses: nick-invision/retry@v2.6.0
-      with:
-        timeout_minutes: 10
-        max_attempts: 3
-        command: cd ${{env.desktop-directory}} && yarn
-    - name: Build
-      uses: nick-invision/retry@v2.6.0
-      with:
-        timeout_minutes: 30
-        max_attempts: 3
-        command: cd ${{env.desktop-directory}} && yarn build --mac --mac-dmg
-    - name: Upload
-      uses: actions/upload-artifact@v1
-      with:
-        name: 'Flipper-mac.dmg'
-        path: 'dist/Flipper-mac.dmg'
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: Install
+        uses: nick-invision/retry@v2.6.0
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: cd ${{env.desktop-directory}} && yarn
+      - name: Build
+        uses: nick-invision/retry@v2.6.0
+        with:
+          timeout_minutes: 30
+          max_attempts: 3
+          command: cd ${{env.desktop-directory}} && yarn build --mac --mac-dmg
+      - name: Upload
+        uses: actions/upload-artifact@v1
+        with:
+          name: "Flipper-mac.dmg"
+          path: "dist/Flipper-mac.dmg"
 
   build-linux:
     needs:
@@ -83,29 +83,29 @@ jobs:
       desktop-directory: ./desktop
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        ref: ${{ needs.release.outputs.tag }}
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '14.x'
-    - name: Install
-      uses: nick-invision/retry@v2.6.0
-      with:
-        timeout_minutes: 10
-        max_attempts: 3
-        command: cd ${{env.desktop-directory}} && yarn
-    - name: Build
-      uses: nick-invision/retry@v2.6.0
-      with:
-        timeout_minutes: 30
-        max_attempts: 3
-        command: cd ${{env.desktop-directory}} && yarn build --linux
-    - name: Upload Linux
-      uses: actions/upload-artifact@v1
-      with:
-        name: 'Flipper-linux.zip'
-        path: 'dist/Flipper-linux.zip'
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: Install
+        uses: nick-invision/retry@v2.6.0
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: cd ${{env.desktop-directory}} && yarn
+      - name: Build
+        uses: nick-invision/retry@v2.6.0
+        with:
+          timeout_minutes: 30
+          max_attempts: 3
+          command: cd ${{env.desktop-directory}} && yarn build --linux
+      - name: Upload Linux
+        uses: actions/upload-artifact@v1
+        with:
+          name: "Flipper-linux.zip"
+          path: "dist/Flipper-linux.zip"
 
   build-win:
     needs:
@@ -115,31 +115,31 @@ jobs:
       desktop-directory: ./desktop
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        ref: ${{ needs.release.outputs.tag }}
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '14.x'
-    - name: Install
-      uses: nick-invision/retry@v2.6.0
-      with:
-        timeout_minutes: 10
-        max_attempts: 3
-        shell: pwsh
-        command: cd ${{env.desktop-directory}}; yarn
-    - name: Build
-      uses: nick-invision/retry@v2.6.0
-      with:
-        timeout_minutes: 30
-        max_attempts: 3
-        shell: pwsh
-        command: cd ${{env.desktop-directory}}; yarn build --win
-    - name: Upload Windows
-      uses: actions/upload-artifact@v1
-      with:
-        name: 'Flipper-win.zip'
-        path: 'dist/Flipper-win.zip'
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: Install
+        uses: nick-invision/retry@v2.6.0
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          shell: pwsh
+          command: cd ${{env.desktop-directory}}; yarn
+      - name: Build
+        uses: nick-invision/retry@v2.6.0
+        with:
+          timeout_minutes: 30
+          max_attempts: 3
+          shell: pwsh
+          command: cd ${{env.desktop-directory}}; yarn build --win
+      - name: Upload Windows
+        uses: actions/upload-artifact@v1
+        with:
+          name: "Flipper-win.zip"
+          path: "dist/Flipper-win.zip"
 
   build-flipper-server:
     needs:
@@ -149,27 +149,27 @@ jobs:
       desktop-directory: ./desktop
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        ref: ${{ needs.release.outputs.tag }}
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '14.x'
-    - name: Install
-      uses: nick-invision/retry@v2.0.0
-      with:
-        timeout_minutes: 10
-        max_attempts: 3
-        command: cd ${{env.desktop-directory}} && yarn
-    - name: Build
-      run: cd ${{env.desktop-directory}} && yarn build:flipper-server
-    - name: List dist artifacts
-      run: ls -l dist/
-    - name: Upload flipper-server
-      uses: actions/upload-artifact@v2
-      with:
-        name: 'flipper-server.tgz'
-        path: 'dist/flipper-server.tgz'
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ needs.release.outputs.tag }}
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
+      - name: Install
+        uses: nick-invision/retry@v2.0.0
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: cd ${{env.desktop-directory}} && yarn
+      - name: Build
+        run: cd ${{env.desktop-directory}} && yarn build:flipper-server
+      - name: List dist artifacts
+        run: ls -l dist/
+      - name: Upload flipper-server
+        uses: actions/upload-artifact@v2
+        with:
+          name: "flipper-server.tgz"
+          path: "dist/flipper-server.tgz"
 
   publish:
     needs:
@@ -181,80 +181,80 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download Mac
-      if: ${{ needs.release.outputs.tag != '' }}
-      uses: actions/download-artifact@v1
-      with:
-        name: 'Flipper-mac.dmg'
-        path: 'Flipper-mac.dmg'
-    - name: Download Linux
-      if: ${{ needs.release.outputs.tag != '' }}
-      uses: actions/download-artifact@v1
-      with:
-        name: 'Flipper-linux.zip'
-        path: 'Flipper-linux.zip'
-    - name: Download Windows
-      if: ${{ needs.release.outputs.tag != '' }}
-      uses: actions/download-artifact@v1
-      with:
-        name: 'Flipper-win.zip'
-        path: 'Flipper-win.zip'
-    - name: Download Flipper Server
-      if: ${{ needs.release.outputs.tag != '' }}
-      uses: actions/download-artifact@v1
-      with:
-        name: 'flipper-server.tgz'
-        path: 'flipper-server.tgz'
-    - name: GitHub Upload Release Artifacts
-      if: ${{ needs.release.outputs.tag != '' }}
-      uses: passy/github-upload-release-artifacts-action@v2.2.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        created_tag: ${{ needs.release.outputs.tag }}
-        args: Flipper-mac.dmg/Flipper-mac.dmg Flipper-linux.zip/Flipper-linux.zip Flipper-win.zip/Flipper-win.zip flipper-server.tgz/flipper-server.tgz
-    - name: Set up npm token
-      run: echo "//registry.yarnpkg.com/:_authToken=${{ secrets.FLIPPER_NPM_TOKEN }}" >> ~/.npmrc
-    - name: Publish flipper-server on NPM
-      run: |
-        tar zxvf flipper-server.tgz
-        cd package
-        yarn publish
-    - name: Open issue on failure
-      if: failure()
-      uses: JasonEtco/create-an-issue@v2.4.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        REPOSITORY: ${{ github.repository }}
-        RUN_ID: ${{ github.run_id }}
-        WORKFLOW_NAME: "Publish"
-      with:
-        filename: .github/action-failure-template.md
-  dispatch:
-    needs:
-      - release
-    runs-on: ubuntu-latest
+      - name: Download Mac
+        if: ${{ needs.release.outputs.tag != '' }}
+        uses: actions/download-artifact@v1
+        with:
+          name: "Flipper-mac.dmg"
+          path: "Flipper-mac.dmg"
+      - name: Download Linux
+        if: ${{ needs.release.outputs.tag != '' }}
+        uses: actions/download-artifact@v1
+        with:
+          name: "Flipper-linux.zip"
+          path: "Flipper-linux.zip"
+      - name: Download Windows
+        if: ${{ needs.release.outputs.tag != '' }}
+        uses: actions/download-artifact@v1
+        with:
+          name: "Flipper-win.zip"
+          path: "Flipper-win.zip"
+      - name: Download Flipper Server
+        if: ${{ needs.release.outputs.tag != '' }}
+        uses: actions/download-artifact@v1
+        with:
+          name: "flipper-server.tgz"
+          path: "flipper-server.tgz"
+      - name: GitHub Upload Release Artifacts
+        if: ${{ needs.release.outputs.tag != '' }}
+        uses: passy/github-upload-release-artifacts-action@v2.2.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          created_tag: ${{ needs.release.outputs.tag }}
+          args: Flipper-mac.dmg/Flipper-mac.dmg Flipper-linux.zip/Flipper-linux.zip Flipper-win.zip/Flipper-win.zip flipper-server.tgz/flipper-server.tgz
+      - name: Set up npm token
+        run: echo "//registry.yarnpkg.com/:_authToken=${{ secrets.FLIPPER_NPM_TOKEN }}" >> ~/.npmrc
+      - name: Publish flipper-server on NPM
+        run: |
+          tar zxvf flipper-server.tgz
+          cd package
+          echo yarn publish
+      - name: Open issue on failure
+        if: failure()
+        uses: JasonEtco/create-an-issue@v2.4.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+          WORKFLOW_NAME: "Publish"
+        with:
+          filename: .github/action-failure-template.md
+  # dispatch:
+  #   needs:
+  #     - release
+  #   runs-on: ubuntu-latest
 
-    steps:
-    - name: Publish Workflow Dispatch
-      if: ${{ needs.release.outputs.tag != '' }}
-      uses: benc-uk/workflow-dispatch@v1.1
-      with:
-        workflow: Publish Pods
-        token: ${{ secrets.PERSONAL_TOKEN }}
-        ref: ${{ needs.release.outputs.tag }}
-    - name: Publish NPM
-      if: ${{ needs.release.outputs.tag != '' }}
-      uses: benc-uk/workflow-dispatch@v1.1
-      with:
-        workflow: Publish NPM
-        token: ${{ secrets.PERSONAL_TOKEN }}
-        ref: ${{ needs.release.outputs.tag }}
-    - name: Publish Android
-      if: ${{ needs.release.outputs.tag != '' }}
-      uses: benc-uk/workflow-dispatch@v1.1
-      with:
-        workflow: Publish Android
-        token: ${{ secrets.PERSONAL_TOKEN }}
-        ref: ${{ needs.release.outputs.tag }}
-        inputs: '{"tag": "${{ needs.release.outputs.tag }}"}'
+  #   steps:
+  #   - name: Publish Workflow Dispatch
+  #     if: ${{ needs.release.outputs.tag != '' }}
+  #     uses: benc-uk/workflow-dispatch@v1.1
+  #     with:
+  #       workflow: Publish Pods
+  #       token: ${{ secrets.PERSONAL_TOKEN }}
+  #       ref: ${{ needs.release.outputs.tag }}
+  #   - name: Publish NPM
+  #     if: ${{ needs.release.outputs.tag != '' }}
+  #     uses: benc-uk/workflow-dispatch@v1.1
+  #     with:
+  #       workflow: Publish NPM
+  #       token: ${{ secrets.PERSONAL_TOKEN }}
+  #       ref: ${{ needs.release.outputs.tag }}
+  #   - name: Publish Android
+  #     if: ${{ needs.release.outputs.tag != '' }}
+  #     uses: benc-uk/workflow-dispatch@v1.1
+  #     with:
+  #       workflow: Publish Android
+  #       token: ${{ secrets.PERSONAL_TOKEN }}
+  #       ref: ${{ needs.release.outputs.tag }}
+  #       inputs: '{"tag": "${{ needs.release.outputs.tag }}"}'
