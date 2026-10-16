@@ -8,7 +8,7 @@ on:
 
 jobs:
   publish_flipper_pod:
-    if: ${{ github.repository == 'facebook/flipper' }}
+    if: ${{ (github.repository == 'facebook/flipper' || github.repository == 'passy/flipper') }}
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3.5.3
@@ -25,10 +25,10 @@ jobs:
       - name: Push Flipper
         run: ./scripts/publish-flipper-pods.sh ./ Flipper
         env:
-          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+          COCOAPODS_TRUNK_TOKEN: rehearsal-fake-trunk-token
 
   publish_flipperkit_pod:
-    if: ${{ github.repository == 'facebook/flipper' }}
+    if: ${{ always() && (github.repository == 'facebook/flipper' || github.repository == 'passy/flipper') }}
     needs: publish_flipper_pod
     runs-on: macos-latest
     steps:
@@ -43,13 +43,18 @@ jobs:
       - name: Update FlipperKit version
         run: ./scripts/update-pod-versions.sh ./ ./FlipperKit.podspec
 
+      - name: Rehearsal - lint FlipperKit against the in-repo Flipper podspec
+        run: |
+          ./scripts/update-pod-versions.sh ./ ./Flipper.podspec
+          pod lib lint FlipperKit.podspec --include-podspecs=Flipper.podspec --use-libraries --allow-warnings --skip-import-validation --verbose
+
       - name: Push FlipperKit
         run: ./scripts/publish-flipper-pods.sh ./ FlipperKit
         env:
-          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+          COCOAPODS_TRUNK_TOKEN: rehearsal-fake-trunk-token
 
   create_pr:
-    if: ${{ github.repository == 'facebook/flipper' }}
+    if: ${{ (github.repository == 'facebook/flipper' || github.repository == 'passy/flipper') }}
     needs: publish_flipperkit_pod
     runs-on: macos-latest
     steps:
