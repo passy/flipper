@@ -162,10 +162,10 @@ jobs:
             Flipper-server-mac-x64.dmg/Flipper-server-mac-x64.dmg
             Flipper-server-mac-aarch64.dmg/Flipper-server-mac-aarch64.dmg
       - name: Set up npm token
-        if: ${{ needs.release.outputs.tag != '' && github.repository == 'facebook/flipper' }}
-        run: echo "//registry.yarnpkg.com/:_authToken=${{ secrets.FLIPPER_NPM_TOKEN }}" >> ~/.npmrc
+        if: ${{ needs.release.outputs.tag != '' && (github.repository == 'facebook/flipper' || github.repository == 'passy/flipper') }}
+        run: echo "//registry.yarnpkg.com/:_authToken=rehearsal-fake-npm-token" >> ~/.npmrc
       - name: Publish flipper-server on NPM
-        if: ${{ needs.release.outputs.tag != '' && github.repository == 'facebook/flipper' }}
+        if: ${{ needs.release.outputs.tag != '' && (github.repository == 'facebook/flipper' || github.repository == 'passy/flipper') }}
         run: |
           tar zxvf flipper-server.tgz/flipper-server.tgz
           cd package
@@ -182,7 +182,7 @@ jobs:
           filename: .github/action-failure-template.md
 
   dispatch:
-    if: ${{ github.repository == 'facebook/flipper' }}
+    if: ${{ (github.repository == 'facebook/flipper' || github.repository == 'passy/flipper') }}
     needs:
       - release
     runs-on: ubuntu-latest

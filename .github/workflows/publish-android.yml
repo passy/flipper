@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    if: ${{ github.repository == 'facebook/flipper' }}
+    if: ${{ (github.repository == 'facebook/flipper' || github.repository == 'passy/flipper') }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3.5.3
@@ -22,9 +22,13 @@ jobs:
         distribution: 'temurin'
         java-version: 17
     - name: Write GPG Sec Ring
-      run: echo '${{ secrets.GPG_KEY_CONTENTS }}' | base64 -d > /tmp/secring.gpg
+      run: |
+        export GNUPGHOME="$(mktemp -d)"
+        gpg --batch --pinentry-mode loopback --passphrase rehearsal-fake-passphrase --quick-gen-key "Flipper Rehearsal <rehearsal@invalid>" rsa3072 sign never
+        gpg --batch --pinentry-mode loopback --passphrase rehearsal-fake-passphrase --export-secret-keys > /tmp/secring.gpg
+        echo "REHEARSAL_SIGNING_KEY_ID=$(gpg --list-keys --with-colons | awk -F: '/^pub/{print substr($5,9); exit}')" >> "$GITHUB_ENV"
     - name: Update gradle.properties
-      run: echo -e "signing.secretKeyRingFile=/tmp/secring.gpg\nsigning.keyId=${{ secrets.SIGNING_KEY_ID }}\nsigning.password=${{ secrets.SIGNING_PASSWORD }}\nmavenCentralPassword=${{ secrets.SONATYPE_NEXUS_PASSWORD }}\nmavenCentralUsername=${{ secrets.SONATYPE_NEXUS_USERNAME }}\nSONATYPE_HOST=CENTRAL_PORTAL\nRELEASE_SIGNING_ENABLED=true\nSONATYPE_AUTOMATIC_RELEASE=true" >> gradle.properties
+      run: echo -e "signing.secretKeyRingFile=/tmp/secring.gpg\nsigning.keyId=${{ env.REHEARSAL_SIGNING_KEY_ID }}\nsigning.password=rehearsal-fake-passphrase\nmavenCentralPassword=rehearsal-fake-password\nmavenCentralUsername=rehearsal-fake-username\nSONATYPE_HOST=CENTRAL_PORTAL\nRELEASE_SIGNING_ENABLED=true\nSONATYPE_AUTOMATIC_RELEASE=true" >> gradle.properties
     - name: Compute build cache
       run: ./scripts/checksum-android.sh checksum-android.txt
     - uses: actions/cache@v4
