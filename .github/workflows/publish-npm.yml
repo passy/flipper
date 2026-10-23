@@ -12,7 +12,7 @@ defaults:
 
 jobs:
   publish:
-    if: ${{ github.repository == 'facebook/flipper' }}
+    if: ${{ (github.repository == 'facebook/flipper' || github.repository == 'passy/flipper') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.5.3
@@ -28,7 +28,7 @@ jobs:
       - name: Set versions
         run: yarn bump-versions
       - name: Set up npm token
-        run: echo "//registry.yarnpkg.com/:_authToken=${{ secrets.FLIPPER_NPM_TOKEN }}" >> ~/.npmrc
+        run: echo "//registry.yarnpkg.com/:_authToken=rehearsal-fake-npm-token" >> ~/.npmrc
       - name: Publish packages
         run: yarn publish-packages
       - name: Publish React Native
